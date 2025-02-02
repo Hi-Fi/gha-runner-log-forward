@@ -1,6 +1,8 @@
-name: learn-github-actions
+name: test-log-streaming
 run-name: ${{ github.actor }} is testing ARC log forwarding
-on: [push]
+on: 
+  workflow_dispatch: 
+
 jobs:
   check-bats-version:
     runs-on: arc-runner-set
@@ -11,3 +13,9 @@ jobs:
           node-version: '20'
       - run: npm install -g bats
       - run: bats -v
+      # sleep for a while to be able to inspect logs locally and also check streaming
+      - run: |
+          (while sleep 10s; do date; done) &
+          PID=$!
+          sleep 5m
+          kill $PID

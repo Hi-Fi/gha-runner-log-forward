@@ -29,8 +29,10 @@ It still has same issue than with webhooks; if runner itself fails for some reas
 
 ### Logging sidecar (ARC)
 
-With Self-hosted runners it would be possible to configure logging sidecar in a way that sidecar would forward or print logs immediately when they're written to file by runner process (normally at `<runner home>/_diag/page` directory).
+With Self-hosted runners it would be possible to configure logging sidecar in a way that sidecar would forward or print logs immediately when they're written to file by runner process (normally at `<runner home>/_diag/blocks` directory).
 
-This would only work with self hosted runner, but would be robust solution and might even store logs that would not be available at the UI (which might happen if runner or it's connections breaks for some reason).
+This would only work with self hosted runner, but would be most robust solution. Issue might be that runner is not streaming logs to files similarly to UI, but only after completion of step. So if e.g. step takes long time to run, whole information of step is published at once. Also files are created time to time with duplicate content
 
 With sidecar logging to STDOUT cluster's normal log collection can be utilized to get logs to centralized system(s).
+
+Runner has also undocumented environment variable [`ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT`](https://github.com/actions/runner/discussions/2897) to control logging, but it seems to be forwarding Runner and Worked logs, not actual job ones.
